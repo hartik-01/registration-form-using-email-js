@@ -4,6 +4,7 @@
 })();
 
 let generatedCode = null;
+let isVerified = false; // Flag to check if the user is verified
 
 function validateForm() {
     let name = document.getElementById('name').value;
@@ -38,14 +39,23 @@ function validateForm() {
         return false;
     }
 
-    // Generate a random verification code
-    generatedCode = Math.floor(100000 + Math.random() * 900000);
+    // Only generate and send a verification code if not verified
+    if (!isVerified) {
+        // Generate a random verification code
+        generatedCode = Math.floor(100000 + Math.random() * 900000);
 
-    // Send the verification email
-    sendVerificationEmail(name, email, generatedCode);
+        // Send the verification email
+        sendVerificationEmail(name, email, generatedCode);
 
-    // Show the verification code section
-    document.getElementById('verificationSection').style.display = 'block';
+        // Show the verification code section
+        document.getElementById('verificationSection').style.display = 'block';
+    } else {
+        // Show success message
+        alert('Registration successful!');
+        // Reset the form and hide error messages
+        document.getElementById('registrationForm').reset();
+        document.getElementById('errorMessages').innerHTML = '';
+    }
 
     return false; // Prevent form submission
 }
@@ -81,6 +91,19 @@ function verifyCode() {
     if (parseInt(enteredCode) === generatedCode) {
         document.getElementById('verificationResult').innerText = 'Verification successful!';
         document.getElementById('verificationResult').style.color = 'green';
+
+        // Set the verified flag to true
+        isVerified = true;
+
+        // Disable the verification section
+        document.getElementById('verificationSection').style.display = 'none';
+
+        // Show success message
+        alert('Registration successful!');
+
+        // Reset the form and hide error messages
+        document.getElementById('registrationForm').reset();
+        document.getElementById('errorMessages').innerHTML = '';
     } else {
         document.getElementById('verificationResult').innerText = 'Verification failed. Please check the code and try again.';
         document.getElementById('verificationResult').style.color = 'red';
