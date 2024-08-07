@@ -1,0 +1,1 @@
+# Implement Email Pot generation and verification in previous registration form by using EmailJs.
